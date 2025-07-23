@@ -1,0 +1,70 @@
+{% include "headitem.html.twig" with {title: "ENDERECO_ADDRESSCHECK"|translate} %}
+
+<form name="transfer" id="transfer" action="{{ oViewConf.getSelfLink() }}" method="post">
+    {{ oViewConf.getHiddenSid()|raw }}
+    <input type="hidden" name="oxid" value="{{ oxid }}">
+    <input type="hidden" name="cl" value="order_overview">
+</form>
+
+
+
+<table cellspacing="0" cellpadding="0" border="0" width="500px">
+    <tr>
+        <td valign="top" class="edittext">
+            {{ translate({ ident: "ENDERECO_CHECK_STATUS", suffix: "COLON" }) }}
+        </td>
+        <!-- Anfang rechte Seite -->
+        <td valign="top" class="edittext" align="left" width="50%">
+            {% for status in mojoamsstatus %}
+                {{ status }}<br>
+            {% endfor %}
+        </td>
+        <!-- Ende rechte Seite -->
+    </tr>
+    <tr>
+        <td colspan="2" height="5px"></td>
+    </tr>
+    <tr>
+        <td valign="top" class="edittext">
+            {{ translate({ ident: "ENDERECO_CHECK_TS", suffix: "COLON" }) }}
+        </td>
+        <!-- Anfang rechte Seite -->
+        <td valign="top" class="edittext" align="left" width="50%">
+            {{ mojoamsts }}
+        </td>
+        <!-- Ende rechte Seite -->
+    </tr>
+    <tr>
+        <td colspan="2" height="5px"></td>
+    </tr>
+    <tr>
+        <td valign="top" class="edittext">
+            {{ translate({ ident: "ENDERECO_CHECK_PREDICTIONS", suffix: "COLON" }) }}
+        </td>
+        <!-- Anfang rechte Seite -->
+        <td valign="top" class="edittext" align="left" width="50%">
+            {% if mojoamspredictions %}
+                {% for prediction in mojoamspredictions %}
+                    {{ prediction|raw }}<br>
+                {% endfor %}
+            {% endif %}
+        </td>
+        <!-- Ende rechte Seite -->
+    </tr>
+    <tr>
+        <td colspan="2" height="5px"></td>
+    </tr>
+    <tr>
+        <td valign="top" class="edittext">
+            {{ translate({ ident: "ENDERECO_CHECK_NAMESCORE", suffix: "COLON" }) }}
+        </td>
+        <!-- Anfang rechte Seite -->
+        <td valign="top" class="edittext" align="left" width="50%">
+            {{ mojonamescore }}
+        </td>
+        <!-- Ende rechte Seite -->
+    </tr>
+</table>
+
+{% include "bottomnaviitem.html.twig" %}
+{% include "bottomitem.html.twig" %}

@@ -1,0 +1,127 @@
+#####
+{% set sitepath = oViewConf.getBaseDir() %}
+
+{% if not enderecoclient.bAllowControllerFilter or enderecoclient.sControllerClass in enderecoclient.aAllowedControllerClasses or ('order' == enderecoclient.sControllerClass and enderecoclient.sCHECKALL)  %}
+
+    {% set popUpHeadline = "ENDERECOOXID6CLIENT_POPUP_HEADLINE"|translate %}
+    {% set popUpSubline = "ENDERECOOXID6CLIENT_POPUP_SUBLINE"|translate %}
+
+    {% set mistakeNoPredictionSubline = "ENDERECOOXID6CLIENT_mistakeNoPredictionSubline"|translate %}
+    {% set notFoundSubline = "ENDERECOOXID6CLIENT_notFoundSubline"|translate %}
+    {% set confirmMyAddressCheckbox = "ENDERECOOXID6CLIENT_confirmMyAddressCheckbox"|translate %}
+
+    {% set yourInput = "ENDERECOOXID6CLIENT_POPUP_INPUT"|translate %}
+    {% set editYourInput = "ENDERECOOXID6CLIENT_POPUP_EDITINPUT"|translate %}
+    {% set ourSuggestions = "ENDERECOOXID6CLIENT_POPUP_SUGGESTIONS"|translate %}
+    {% set useSelected = "ENDERECOOXID6CLIENT_POPUP_USE"|translate %}
+
+    {% set confirmAddress = "ENDERECOOXID6CLIENT_confirmAddress"|translate %}
+    {% set editAddress = "ENDERECOOXID6CLIENT_editAddress"|translate %}
+    {% set warningText = "ENDERECOOXID6CLIENT_warningText"|translate %}
+
+    {% set generalAddress = "ENDERECOOXID6CLIENT_POPUP_HEADLINE_GENERAL_ADDRESS"|translate %}
+    {% set billingAddress = "ENDERECOOXID6CLIENT_POPUP_HEADLINE_BILLING_ADDRESS"|translate %}
+    {% set shippingAddress = "ENDERECOOXID6CLIENT_POPUP_HEADLINE_SHIPPING_ADDRESS"|translate %}
+    {% set emailNotCorrect = "ENDERECOOXID6CLIENT_STATUS_EMAIL_NOT_CORRECT"|translate %}
+    {% set emailVantReceive = "ENDERECOOXID6CLIENT_STATUS_EMAIL_CANT_RECEIVE"|translate %}
+    {% set emailSyntaxError = "ENDERECOOXID6CLIENT_STATUS_EMAIL_SYNTAX_ERROR"|translate %}
+    {% set emailNoMx = "ENDERECOOXID6CLIENT_STATUS_EMAIL_NO_MX"|translate %}
+
+    {% set buildingNumberIsMissing = "ENDERECOOXID6CLIENT_STATUS_buildingNumberIsMissing"|translate %}
+    {% set buildingNumberNotFound = "ENDERECOOXID6CLIENT_STATUS_buildingNumberNotFound"|translate %}
+    {% set streetNameNeedsCorrection = "ENDERECOOXID6CLIENT_STATUS_streetNameNeedsCorrection"|translate %}
+    {% set localityNeedsCorrection = "ENDERECOOXID6CLIENT_STATUS_localityNeedsCorrection"|translate %}
+    {% set postalCodeNeedsCorrection = "ENDERECOOXID6CLIENT_STATUS_postalCodeNeedsCorrection"|translate %}
+    {% set countryCodeNeedsCorrection = "ENDERECOOXID6CLIENT_STATUS_countryCodeNeedsCorrection"|translate %}
+
+    <script>
+        function enderecoLoadAMSConfig() {
+            window.EnderecoIntegrator.config.apiUrl = "{{ oViewConf.getModuleUrl('endereco-oxid7-client', 'proxy/io.php') }}";
+            window.EnderecoIntegrator.config.apiKey = '{{ enderecoclient.sAPIKEY }}';
+            window.EnderecoIntegrator.config.remoteApiUrl = '{{ enderecoclient.sSERVICEURL }}';
+            window.EnderecoIntegrator.themeName = '{{ enderecoclient.sThemeName }}';
+            window.EnderecoIntegrator.defaultCountry = '{{ enderecoclient.sPreselectableCountries }}';
+            window.EnderecoIntegrator.defaultCountrySelect = {% if enderecoclient.bPreselectCountry  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.showDebugInfo = {% if enderecoclient.bShowDebug  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.trigger.onblur = {% if enderecoclient.sAMSBLURTRIGGER  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.trigger.onsubmit = {% if enderecoclient.sAMSSubmitTrigger  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.ux.resumeSubmit = {% if enderecoclient.sAMSResumeSubmit  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.ux.smartFill = {% if enderecoclient.sSMARTFILL  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.ux.checkExisting = {% if enderecoclient.sCHECKALL  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.ux.changeFieldsOrder = {% if enderecoclient.bChangeFieldsOrder  %}true{% else %}false{% endif %};;
+            window.EnderecoIntegrator.config.ux.showEmailStatus = {% if enderecoclient.bShowEmailserviceErrors  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.ux.useStandardCss = {% if enderecoclient.bUseCss  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.ux.allowCloseModal = {% if enderecoclient.bAllowCloseModal  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.ux.confirmWithCheckbox = {% if enderecoclient.bConfirmWithCheckbox  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.ux.correctTranspositionedNames = {% if enderecoclient.bCorrectTranspositionedNames  %}true{% else %}false{% endif %};
+            window.EnderecoIntegrator.config.templates.primaryButtonClasses = 'btn btn-primary';
+            window.EnderecoIntegrator.config.templates.secondaryButtonClasses = 'btn btn-secondary';
+            window.EnderecoIntegrator.config.texts = {
+                'popUpHeadline': '{{ popUpHeadline|raw }}',
+                'popUpSubline': '{{ popUpSubline|raw }}',
+                'mistakeNoPredictionSubline': '{{ mistakeNoPredictionSubline|raw }}',
+                'notFoundSubline': '{{ notFoundSubline|raw }}',
+                'confirmMyAddressCheckbox': '{{ confirmMyAddressCheckbox|raw }}',
+                'yourInput': '{{ yourInput|raw }}',
+                'editYourInput': '{{ editYourInput|raw }}',
+                'ourSuggestions': '{{ ourSuggestions|raw }}',
+                'useSelected': '{{ useSelected|raw }}',
+                'confirmAddress': '{{ confirmAddress|raw }}',
+                'editAddress': '{{ editAddress|raw }}',
+                'warningText': '{{ warningText|raw }}',
+                popupHeadlines: {
+                    'general_address': '{{ generalAddress|raw }}',
+                    'billing_address': '{{ billingAddress|raw }}',
+                    'shipping_address': '{{ shippingAddress|raw }}'
+                },
+                statuses: {
+                    'email_not_correct': '{{ emailNotCorrect|raw }}',
+                    'email_cant_receive': '{{ emailVantReceive|raw }}',
+                    'email_syntax_error': '{{ emailSyntaxError|raw }}',
+                    'email_no_mx': '{{ emailNoMx|raw }}',
+                    'building_number_is_missing': '{{ buildingNumberIsMissing|raw }}',
+                    'building_number_not_found': '{{ buildingNumberNotFound|raw }}',
+                    'street_name_needs_correction': '{{ streetNameNeedsCorrection|raw }}',
+                    'locality_needs_correction': '{{ localityNeedsCorrection|raw }}',
+                    'postal_code_needs_correction': '{{ postalCodeNeedsCorrection|raw }}',
+                    'country_code_needs_correction': '{{ countryCodeNeedsCorrection|raw }}'
+                }
+            };
+            window.EnderecoIntegrator.activeServices = {
+                ams: {% if enderecoclient.sUSEAMS  %}true{% else %}false{% endif %},
+                emailService: {% if enderecoclient.bUseEmailservice  %}true{% else %}false{% endif %},
+                personService: {% if enderecoclient.bUsePersonalService  %}true{% else %}false{% endif %}
+            }
+
+            window.EnderecoIntegrator.countryCodeToNameMapping = JSON.parse('{{ enderecoclient.sCountries|raw }}');
+            window.EnderecoIntegrator.countryMapping = JSON.parse('{{ enderecoclient.oCountryMapping|raw }}');
+            window.EnderecoIntegrator.countryMappingReverse = JSON.parse('{{ enderecoclient.oCountryMappingReverse|raw }}');
+
+            window.EnderecoIntegrator.subdivisionCodeToNameMapping = JSON.parse('{{ enderecoclient.oSubdivisions|raw }}');
+            window.EnderecoIntegrator.subdivisionMapping = JSON.parse('{{ enderecoclient.oSubdivisionMapping|raw }}');
+            window.EnderecoIntegrator.subdivisionMappingReverse = JSON.parse('{{ enderecoclient.oSubdivisionMappingReverse|raw }}');
+
+            window.EnderecoIntegrator.checkAllCallback = function(EAO) {
+                if ('billing_address' === EAO.addressType) {
+                    if (document.querySelector('#userChangeAddress')) {
+                        document.querySelector('#userChangeAddress').click();
+                    }
+                } else if ('shipping_address' === EAO.addressType) {
+                    if (document.querySelector('.dd-available-addresses .dd-edit-shipping-address')) {
+                        document.querySelector('.dd-available-addresses .dd-edit-shipping-address').click();
+                    }
+                }
+            }
+
+            window.EnderecoIntegrator.onLoad.forEach(function (callback) {
+                callback();
+            });
+
+            window.EnderecoIntegrator.ready = true;
+        }
+    </script>
+    <script async defer src="{{ oViewConf.getModuleUrl('endereco-oxid7-client', 'js/endereco.min.js') }}?ver={{ enderecoclient.sModuleVersion }}"></script>
+    {{ include_widget({ cl: "enderecocolor" }) }}
+{% endif %}
+
+

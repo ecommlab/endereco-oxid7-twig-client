@@ -1,0 +1,16 @@
+{% extends "form/fieldset/user_noaccount.html.twig" %}
+
+{% block user_noaccount_email %}
+{{ parent() }}
+
+<script>
+    ( function() {
+        var $interval = setInterval( function() {
+            if (window.EnderecoIntegrator && window.EnderecoIntegrator.ready) {
+                window.EnderecoIntegrator.initEmailServices('');
+                clearInterval($interval);
+            }
+        }, 100);
+    })();
+</script>
+{% endblock %}
