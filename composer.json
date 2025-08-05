@@ -1,11 +1,11 @@
 {
-    "name": "endereco/endereco-oxid7-client",
+    "name": "endereco/endereco-oxid7-twig-client",
     "type": "oxideshop-module",
     "license": "GPL-3.0-only",
-    "version": "4.6.7",
+    "version": "1.0.0",
     "extra": {
         "oxideshop": {
-            "target-directory": "endereco/endereco-oxid7-client"
+            "target-directory": "endereco/endereco-oxid7-twig-client"
         },
         "hooks": {
             "pre-commit": [
