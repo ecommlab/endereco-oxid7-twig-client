@@ -12,6 +12,7 @@
         enderecoInitAMS(
             {
                 countryCode: '[name="deladr[oxaddress__oxcountryid]"]',
+                subdivisionCode: '[name="deladr[oxaddress__oxstateid]"]',
                 postalCode: '[name="deladr[oxaddress__oxzip]"]',
                 locality: '[name="deladr[oxaddress__oxcity]"]',
                 streetName: '[name="deladr[oxaddress__oxstreet]"]',
@@ -24,24 +25,23 @@
             },
             {
                 name: 'shipping',
-                addressType: 'shipping_address'
+                addressType: 'shipping_address',
+                intent: 'edit'
             },
             function(EAO) {
-                EAO.waitForAllExtension().then( function(EAO) {
-                    EAO.onAfterModalRendered.push(function(EAO) {
-                        if (!document.querySelector('[name="deladr[oxaddress__oxzip]"]').offsetParent) {
-                            if ('billing_address' === EAO.addressType) {
-                                if (document.querySelector('#userChangeAddress')) {
-                                    document.querySelector('#userChangeAddress').click();
-                                }
-                            } else if ('shipping_address' === EAO.addressType) {
-                                if (document.querySelector('.dd-available-addresses .dd-edit-shipping-address')) {
-                                    document.querySelector('.dd-available-addresses .dd-edit-shipping-address').click();
-                                }
+                EAO.onAfterModalRendered.push(function(EAO) {
+                    if (!document.querySelector('[name="deladr[oxaddress__oxzip]"]').offsetParent) {
+                        if ('billing_address' === EAO.addressType) {
+                            if (document.querySelector('#userChangeAddress')) {
+                                document.querySelector('#userChangeAddress').click();
+                            }
+                        } else if ('shipping_address' === EAO.addressType) {
+                            if (document.querySelector('.dd-available-addresses .dd-edit-shipping-address')) {
+                                document.querySelector('.dd-available-addresses .dd-edit-shipping-address').click();
                             }
                         }
-                    })
-                }).catch();
+                    }
+                })
             },
             true
         );
@@ -50,7 +50,6 @@
         ( function() {
             var $interval = setInterval( function() {
                 if (window.EnderecoIntegrator && window.EnderecoIntegrator.ready) {
-                    console.log('EnderecoIntegrator.ready');
                     window.EnderecoIntegrator.initPersonServices(
                         'deladr[oxaddress__',
                         {

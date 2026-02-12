@@ -2,11 +2,11 @@
 
 namespace Endereco\Oxid7Client\Controller;
 
+use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\Country;
 use Endereco\Oxid7Client\Component\EnderecoService;
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Core\Di\ContainerFacade;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
 
@@ -38,7 +38,7 @@ class OrderController extends OrderController_parent
             $payment = $this->getPayment();
 
             // Check if its a PayPal Express checkout user
-            if (
+            if ( ($payment instanceof Payment) &&
                 ('0000-00-00 00:00:00' === $oUser->oxuser__oxregister->rawValue)
                 && ('oxidpaypal' === $payment->getId() || 'oscpaypal_express' === $payment->getId())
                 && $bCheckExistingPayPalExpress
