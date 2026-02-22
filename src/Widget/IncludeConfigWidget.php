@@ -114,7 +114,7 @@ class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget
         foreach ($resultSet as $result) {
             $aStates[$result[0]] = $result[1];
             $aStatesMapping[strtoupper($result[0])] = $result[2];
-            $aStatesMappingReverse[$result[3] . '-' . $result[2]] = strtoupper($result[0]);
+            $aStatesMappingReverse[$result[2]] = strtoupper($result[0]);
         }
 
         $this->_aViewData['enderecoclient']['oSubdivisions'] = json_encode($aStates);

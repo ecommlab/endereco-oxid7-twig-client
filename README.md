@@ -6,12 +6,12 @@ Die Installation erfolgt in folgenden Schritten:
 
 1. Das Modul über Composer installieren
 
-`composer require endereco/endereco-oxid7-client`
+`composer require endereco/endereco-oxid7-twig-client`
 
 Der Befehl lädt die neuste Version herunter. Um eine spezielle Version zu installieren, zum Beispiel *4.6.7*, kann
 der Befehl folgenderweise angepasst werden.
 
-`composer require endereco/endereco-oxid7-client:4.6.7`
+`composer require endereco/endereco-oxid7-twig-client:1.0`
 
 2. Migrationen ausführen (optional)
 

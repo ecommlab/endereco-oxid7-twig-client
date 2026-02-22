@@ -79,37 +79,65 @@ EnderecoIntegrator.resolvers.subdivisionCodeRead = function (value, subscriber) 
 }
 
 EnderecoIntegrator.resolvers.countryCodeSetValue = function (subscriber, value) {
-    if (
-        !!$ &&
-        subscriber.object &&
-        subscriber.object.classList.contains('selectpicker') &&
-        !!$(subscriber.object).selectpicker
-    ) {
-        $(subscriber.object).selectpicker('val', value);
-    } else {
-        subscriber.object.value = value;
+    if (!subscriber || !subscriber.object) {
+        return;
     }
 
-    if (!!$) {
-        $(subscriber.object).trigger('change');
+    var element = subscriber.object;
+
+    var hasJQuery = typeof window.jQuery !== "undefined";
+    var hasSelectPicker = false;
+
+    if (hasJQuery) {
+        var $el = window.jQuery(element);
+        hasSelectPicker = typeof $el.selectpicker === "function" && $el.data('selectpicker');
     }
-}
+
+    // Wert setzen
+    if (hasJQuery && hasSelectPicker) {
+        // Bootstrap-select korrekt aktualisieren
+        window.jQuery(element).selectpicker('val', value);
+    } else {
+        // Standard-Setzen
+        element.value = value;
+
+        // Wenn jQuery vorhanden → zusätzlich jQuery-Change triggern
+        if (hasJQuery) {
+            window.jQuery(element).trigger('change');
+            return;
+        }
+    }
+
+    // Native Change Event (Fallback / Ergänzung)
+    var event;
+    if (typeof Event === 'function') {
+        event = new Event('change', { bubbles: true });
+    } else {
+        event = document.createEvent('Event');
+        event.initEvent('change', true, true);
+    }
+
+    element.dispatchEvent(event);
+};
 
 EnderecoIntegrator.resolvers.subdivisionCodeSetValue = function (subscriber, value) {
-    if (
-      !!$ &&
-      subscriber.object &&
-      subscriber.object.classList.contains('selectpicker') &&
-      !!$(subscriber.object).selectpicker
-    ) {
-        $(subscriber.object).selectpicker('val', value);
-    } else {
-        subscriber.object.value = value;
+    if (!subscriber || !subscriber.object) {
+        return;
     }
 
-    if (!!$) {
-        $(subscriber.object).trigger('change');
+    var element = subscriber.object;
+
+    element.value = value;
+
+    // Trigger native change event
+    var event;
+    if (typeof Event === 'function') {
+        event = new Event('change', { bubbles: true });
+    } else {
+        event = document.createEvent('Event');
+        event.initEvent('change', true, true);
     }
+    element.dispatchEvent(event);
 }
 
 EnderecoIntegrator.resolvers.salutationWrite = function (value, subscriber) {
@@ -132,16 +160,23 @@ EnderecoIntegrator.resolvers.salutationRead = function (value, subscriber) {
 }
 
 EnderecoIntegrator.resolvers.salutationSetValue = function (subscriber, value) {
-    if (
-        !!$ &&
-        subscriber.object &&
-        subscriber.object.classList.contains('selectpicker') &&
-        !!$(subscriber.object).selectpicker
-    ) {
-        $(subscriber.object).selectpicker('val', value);
-    } else {
-        subscriber.object.value = value;
+    if (!subscriber || !subscriber.object) {
+        return;
     }
+
+    var element = subscriber.object;
+
+    element.value = value;
+
+    // Trigger native change event (if listeners depend on it)
+    var event;
+    if (typeof Event === 'function') {
+        event = new Event('change', { bubbles: true });
+    } else {
+        event = document.createEvent('Event');
+        event.initEvent('change', true, true);
+    }
+    element.dispatchEvent(event);
 }
 
 EnderecoIntegrator.afterAMSActivation.push( function(EAO) {
@@ -174,6 +209,7 @@ window.EnderecoIntegrator.waitUntilReady().then(function () {
     //
 });
 
+
 const waitForConfig = setInterval(function () {
     if (typeof enderecoLoadAMSConfig === 'function') {
         try {
@@ -185,3 +221,5 @@ const waitForConfig = setInterval(function () {
         }
     }
 }, 100);
+
+
