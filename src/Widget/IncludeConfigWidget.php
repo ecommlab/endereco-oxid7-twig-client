@@ -60,7 +60,8 @@ class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget
         foreach ($moduleConfiguration->getModuleSettings() as $moduleSetting) {
             $this->_aViewData['enderecoclient'][$moduleSetting->getName()] = $moduleSetting->getValue();
             if ($moduleSetting->getName() == 'sAllowedControllerClasses') {
-                $this->_aViewData['enderecoclient']['aAllowedControllerClasses'] = explode(',', $moduleSetting->getValue());
+                $this->_aViewData['enderecoclient']['aAllowedControllerClasses'] =
+                    explode(',', $moduleSetting->getValue());
             }
         }
 
@@ -101,8 +102,11 @@ class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget
 
         $sStatesTable = $viewNameGenerator->getViewName('oxstates', $languageId, $sOxId);
         $sql =
-            "SELECT `MOJOISO31662`, `OXTITLE`, `OXID`, `OXISOALPHA2` 
-            FROM {$sStatesTable} WHERE `MOJOISO31662` <> '' AND `MOJOISO31662` IS NOT NULL";
+            "SELECT c.`OXISOALPHA2`, s.`OXTITLE`, s.`OXID`, s.`MOJOISO31662`
+                FROM {$sStatesTable} s
+                JOIN oxcountry c ON s.`OXCOUNTRYID` = c.`OXID`
+                WHERE s.`MOJOISO31662` <> '' AND s.`MOJOISO31662` IS NOT NULL";
+        ;
         $resultSet = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getAll(
             $sql,
             []
@@ -112,9 +116,18 @@ class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget
         $aStatesMappingReverse = [];
 
         foreach ($resultSet as $result) {
-            $aStates[$result[0]] = $result[1];
-            $aStatesMapping[strtoupper($result[0])] = $result[2];
-            $aStatesMappingReverse[$result[3] . '-' . $result[2]] = strtoupper($result[0]);
+            $countryCode = $result[0]; // e.g. "DE"
+            $fullStateCode = $result[3]; // e.g. "DE-BW"
+            $stateName = $result[1]; // e.g. "Baden-Würtemberg"
+            $stateId = $result[2]; // any char(32) e.g. "1c34c5132c23c45.c5234c"
+
+            $aStates[$fullStateCode] = $stateName;
+            $aStatesMapping[mb_strtoupper($fullStateCode)] = $stateId;
+
+            if (!isset($aStatesMappingReverse[$countryCode])) {
+                $aStatesMappingReverse[$countryCode] = [];
+            }
+            $aStatesMappingReverse[$countryCode][$stateId] = mb_strtoupper($fullStateCode);
         }
 
         $this->_aViewData['enderecoclient']['oSubdivisions'] = json_encode($aStates);

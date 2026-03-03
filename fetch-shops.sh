@@ -1,29 +1,49 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Versions to be installed with their corresponding Composer versions
-declare -A versions=( ["6.1"]="1" ["6.2"]="1" ["6.3"]="1" ["6.4"]="2" ["6.5"]="2" )
+versions=(7.1 7.2 7.3)
 
+base_dir="shops"
+cache_dir="$PWD/.composer-cache"
 
-# Loop through each version and set up the projects
-for version in "${!versions[@]}"
-do
-    # Determine which Composer version to use based on the version
-    composer_version="${versions[$version]}"
+mkdir -p "$base_dir"
+mkdir -p "$cache_dir"
 
-    # Target directory for each project
-    TARGET_DIR="shops/$version"
+for version in "${versions[@]}"; do
+  target_dir="$base_dir/$version"
 
-    # Remove the existing directory and recreate it
-    rm -rf "$TARGET_DIR"
-    mkdir -p "$TARGET_DIR"
+  echo "======================================="
+  echo "Installing OXID $version"
+  echo "======================================="
 
-    # Use Docker to run Composer 2 for each project version
-    docker run --rm \
-        -v $(pwd):/app \
-        -w /app \
-        composer:$composer_version \
-        composer create-project --no-dev --ignore-platform-reqs oxid-esales/oxideshop-project $TARGET_DIR dev-b-$version-ce
+  rm -rf -- "$target_dir"
+
+  # Composer-Version je OXID-Version
+  case "$version" in
+    7.1|7.2)
+      composer_image="composer:2.7.7"
+      ;;
+    7.3)
+      composer_image="composer:2.8.8"
+      ;;
+    *)
+      echo "Unknown version $version"
+      exit 1
+      ;;
+  esac
+
+  echo "Using $composer_image"
+
+  docker run --rm \
+    -v "$PWD:/app" \
+    -v "$cache_dir:/tmp/composer-cache" \
+    -e COMPOSER_CACHE_DIR=/tmp/composer-cache \
+    -w /app \
+    "$composer_image" \
+    composer create-project --no-dev --ignore-platform-reqs \
+      oxid-esales/oxideshop-project "$target_dir" "dev-b-${version}-ce"
+
 done
 
-# Change the owner of the shops directory to the user who ran the script
-sudo chown -R $(whoami) shops/
+echo ""
+echo "All OXID 7.x installations completed successfully."
