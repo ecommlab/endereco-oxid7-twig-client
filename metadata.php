@@ -59,6 +59,7 @@ $aModule = [
     ],
     'controllers'  => [
         'enderecoconfig' => \Endereco\Oxid7Client\Widget\IncludeConfigWidget::class,
+        'enderecoconfigapi' => \Endereco\Oxid7Client\Controller\ConfigApiController::class,
         'enderecocolor' => \Endereco\Oxid7Client\Widget\IncludeColorWidget::class,
         'enderecosettings' => \Endereco\Oxid7Client\Controller\Admin\Settings::class,
         'enderecosaveaddress' => \Endereco\Oxid7Client\Controller\AddressController::class,

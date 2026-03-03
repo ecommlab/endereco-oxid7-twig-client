@@ -3,11 +3,9 @@
 namespace Endereco\Oxid7Client\Widget;
 
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\Eshop\Core\Request;
-use OxidEsales\Eshop\Core\Theme;
+use OxidEsales\Eshop\Core\Session;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Facade\ModuleSettingServiceInterface;
 
 class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget\WidgetController
 {
@@ -32,7 +30,8 @@ class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget
     }
 
     /**
-     * Render
+     * Render – only provides data for the template condition, config URL and script version.
+     * Full config (countries, states, settings, texts) is loaded via JSON API.
      *
      * @return string Template name.
      */
@@ -41,26 +40,18 @@ class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget
         parent::render();
 
         $oConfig = Registry::getConfig();
-
-        $sOxId = Registry::get(Request::class)->getRequestEscapedParameter('oxid');
-        if (!$sOxId) {
-            $sOxId = $oConfig->getShopId();
-        }
-
-        $languageId = (int)Registry::getLang()->getBaseLanguage();
-
         $this->_aViewData['enderecoclient'] = [];
-
 
         $moduleConfiguration = ContainerFactory::getInstance()
             ->getContainer()
             ->get(ModuleConfigurationDaoBridgeInterface::class)
-            ->get("endereco-oxid7-client");
+            ->get('endereco-oxid7-client');
 
         foreach ($moduleConfiguration->getModuleSettings() as $moduleSetting) {
             $this->_aViewData['enderecoclient'][$moduleSetting->getName()] = $moduleSetting->getValue();
-            if ($moduleSetting->getName() == 'sAllowedControllerClasses') {
-                $this->_aViewData['enderecoclient']['aAllowedControllerClasses'] = explode(',', $moduleSetting->getValue());
+            if ($moduleSetting->getName() === 'sAllowedControllerClasses') {
+                $this->_aViewData['enderecoclient']['aAllowedControllerClasses'] =
+                    explode(',', $moduleSetting->getValue());
             }
         }
 
@@ -72,54 +63,9 @@ class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget
 
         $this->_aViewData['enderecoclient']['sModuleVersion'] = $moduleConfiguration->getVersion();
 
-        $oTheme = oxNew(Theme::class);
-        $oTheme->load($oTheme->getActiveThemeId());
-        $sThemeId = $oTheme->getId();
-
-        $this->_aViewData['enderecoclient']['sThemeName'] = $sThemeId;
-
-        $viewNameGenerator = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
-
-        $sCountryTable = $viewNameGenerator->getViewName('oxcountry', $languageId, $sOxId);
-        $sql = "SELECT `OXISOALPHA2`, `OXTITLE`, `OXID` FROM {$sCountryTable} WHERE `OXISOALPHA2` <> ''";
-        $resultSet = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getAll(
-            $sql,
-            []
-        );
-        $aCountries = [];
-        $aCountryMapping = [];
-        $aCountryMappingReverse = [];
-
-        foreach ($resultSet as $result) {
-            $aCountries[$result[0]] = $result[1];
-            $aCountryMapping[strtoupper($result[0])] = $result[2];
-            $aCountryMappingReverse[$result[2]] = strtoupper($result[0]);
-        }
-        $this->_aViewData['enderecoclient']['sCountries'] = json_encode($aCountries);
-        $this->_aViewData['enderecoclient']['oCountryMapping'] = json_encode($aCountryMapping);
-        $this->_aViewData['enderecoclient']['oCountryMappingReverse'] = json_encode($aCountryMappingReverse);
-
-        $sStatesTable = $viewNameGenerator->getViewName('oxstates', $languageId, $sOxId);
-        $sql =
-            "SELECT `MOJOISO31662`, `OXTITLE`, `OXID`, `OXISOALPHA2` 
-            FROM {$sStatesTable} WHERE `MOJOISO31662` <> '' AND `MOJOISO31662` IS NOT NULL";
-        $resultSet = \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->getAll(
-            $sql,
-            []
-        );
-        $aStates = [];
-        $aStatesMapping = [];
-        $aStatesMappingReverse = [];
-
-        foreach ($resultSet as $result) {
-            $aStates[$result[0]] = $result[1];
-            $aStatesMapping[strtoupper($result[0])] = $result[2];
-            $aStatesMappingReverse[$result[2]] = strtoupper($result[0]);
-        }
-
-        $this->_aViewData['enderecoclient']['oSubdivisions'] = json_encode($aStates);
-        $this->_aViewData['enderecoclient']['oSubdivisionMapping'] = json_encode($aStatesMapping);
-        $this->_aViewData['enderecoclient']['oSubdivisionMappingReverse'] = json_encode($aStatesMappingReverse);
+        $session = Registry::get(Session::class);
+        $configUrl = $oConfig->getCurrentShopUrl() . 'index.php?cl=enderecoconfigapi&fnc=getConfig';
+        $this->_aViewData['sEnderecoConfigUrl'] = $configUrl . '&stoken=' . $session->getSessionChallengeToken();
 
         return $this->getThisTemplate();
     }
