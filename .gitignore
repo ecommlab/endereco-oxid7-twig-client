@@ -6,4 +6,5 @@ composer.lock
 shops/*
 !shops/*.gitkeep
 cghooks.lock
+.composer-cache/
 

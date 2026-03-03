@@ -16,8 +16,11 @@ class Order extends Order_parent
      * @param $blRecalculatingOrder
      * @return bool|int
      */
-    public function finalizeOrder(\OxidEsales\Eshop\Application\Model\Basket $oBasket, $oUser, $blRecalculatingOrder = false)
-    {
+    public function finalizeOrder(
+        \OxidEsales\Eshop\Application\Model\Basket $oBasket,
+        $oUser,
+        $blRecalculatingOrder = false
+    ) {
         $iRet = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
 
         if ($this->oxorder__oxdelstreet->value != '') {
@@ -40,8 +43,10 @@ class Order extends Order_parent
                         $oAdress->oxaddress__mojoamsts->rawValue,
                         Field::T_RAW
                     );
-                    $this->oxorder__mojoamspredictions = new Field($oAdress->oxaddress__mojoamspredictions->rawValue, Field::T_RAW);
-                    $this->oxorder__mojonamescore = new Field($oAdress->oxaddress__mojonamescore->rawValue, Field::T_RAW);
+                    $this->oxorder__mojoamspredictions =
+                        new Field($oAdress->oxaddress__mojoamspredictions->rawValue, Field::T_RAW);
+                    $this->oxorder__mojonamescore =
+                        new Field($oAdress->oxaddress__mojonamescore->rawValue, Field::T_RAW);
                     $this->save();
                 }
             }

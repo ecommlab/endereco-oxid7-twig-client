@@ -1,38 +1,38 @@
-#####
 {% set sitepath = oViewConf.getBaseDir() %}
 
 {% if not enderecoclient.bAllowControllerFilter or enderecoclient.sControllerClass in enderecoclient.aAllowedControllerClasses or ('order' == enderecoclient.sControllerClass and enderecoclient.sCHECKALL)  %}
 
-    {% set popUpHeadline = "ENDERECOOXID6CLIENT_POPUP_HEADLINE"|translate %}
-    {% set popUpSubline = "ENDERECOOXID6CLIENT_POPUP_SUBLINE"|translate %}
+    {% set popUpHeadline = "ENDERECOOXID7CLIENT_POPUP_HEADLINE"|translate %}
+    {% set popUpSubline = "ENDERECOOXID7CLIENT_POPUP_SUBLINE"|translate %}
 
-    {% set mistakeNoPredictionSubline = "ENDERECOOXID6CLIENT_mistakeNoPredictionSubline"|translate %}
-    {% set notFoundSubline = "ENDERECOOXID6CLIENT_notFoundSubline"|translate %}
-    {% set confirmMyAddressCheckbox = "ENDERECOOXID6CLIENT_confirmMyAddressCheckbox"|translate %}
+    {% set mistakeNoPredictionSubline = "ENDERECOOXID7CLIENT_mistakeNoPredictionSubline"|translate %}
+    {% set notFoundSubline = "ENDERECOOXID7CLIENT_notFoundSubline"|translate %}
+    {% set confirmMyAddressCheckbox = "ENDERECOOXID7CLIENT_confirmMyAddressCheckbox"|translate %}
 
-    {% set yourInput = "ENDERECOOXID6CLIENT_POPUP_INPUT"|translate %}
-    {% set editYourInput = "ENDERECOOXID6CLIENT_POPUP_EDITINPUT"|translate %}
-    {% set ourSuggestions = "ENDERECOOXID6CLIENT_POPUP_SUGGESTIONS"|translate %}
-    {% set useSelected = "ENDERECOOXID6CLIENT_POPUP_USE"|translate %}
+    {% set yourInput = "ENDERECOOXID7CLIENT_POPUP_INPUT"|translate %}
+    {% set editYourInput = "ENDERECOOXID7CLIENT_POPUP_EDITINPUT"|translate %}
+    {% set ourSuggestions = "ENDERECOOXID7CLIENT_POPUP_SUGGESTIONS"|translate %}
+    {% set useSelected = "ENDERECOOXID7CLIENT_POPUP_USE"|translate %}
 
-    {% set confirmAddress = "ENDERECOOXID6CLIENT_confirmAddress"|translate %}
-    {% set editAddress = "ENDERECOOXID6CLIENT_editAddress"|translate %}
-    {% set warningText = "ENDERECOOXID6CLIENT_warningText"|translate %}
+    {% set confirmAddress = "ENDERECOOXID7CLIENT_confirmAddress"|translate %}
+    {% set editAddress = "ENDERECOOXID7CLIENT_editAddress"|translate %}
+    {% set warningText = "ENDERECOOXID7CLIENT_warningText"|translate %}
 
-    {% set generalAddress = "ENDERECOOXID6CLIENT_POPUP_HEADLINE_GENERAL_ADDRESS"|translate %}
-    {% set billingAddress = "ENDERECOOXID6CLIENT_POPUP_HEADLINE_BILLING_ADDRESS"|translate %}
-    {% set shippingAddress = "ENDERECOOXID6CLIENT_POPUP_HEADLINE_SHIPPING_ADDRESS"|translate %}
-    {% set emailNotCorrect = "ENDERECOOXID6CLIENT_STATUS_EMAIL_NOT_CORRECT"|translate %}
-    {% set emailVantReceive = "ENDERECOOXID6CLIENT_STATUS_EMAIL_CANT_RECEIVE"|translate %}
-    {% set emailSyntaxError = "ENDERECOOXID6CLIENT_STATUS_EMAIL_SYNTAX_ERROR"|translate %}
-    {% set emailNoMx = "ENDERECOOXID6CLIENT_STATUS_EMAIL_NO_MX"|translate %}
+    {% set generalAddress = "ENDERECOOXID7CLIENT_POPUP_HEADLINE_GENERAL_ADDRESS"|translate %}
+    {% set billingAddress = "ENDERECOOXID7CLIENT_POPUP_HEADLINE_BILLING_ADDRESS"|translate %}
+    {% set shippingAddress = "ENDERECOOXID7CLIENT_POPUP_HEADLINE_SHIPPING_ADDRESS"|translate %}
+    {% set emailNotCorrect = "ENDERECOOXID7CLIENT_STATUS_EMAIL_NOT_CORRECT"|translate %}
+    {% set emailVantReceive = "ENDERECOOXID7CLIENT_STATUS_EMAIL_CANT_RECEIVE"|translate %}
+    {% set emailSyntaxError = "ENDERECOOXID7CLIENT_STATUS_EMAIL_SYNTAX_ERROR"|translate %}
+    {% set emailNoMx = "ENDERECOOXID7CLIENT_STATUS_EMAIL_NO_MX"|translate %}
 
-    {% set buildingNumberIsMissing = "ENDERECOOXID6CLIENT_STATUS_buildingNumberIsMissing"|translate %}
-    {% set buildingNumberNotFound = "ENDERECOOXID6CLIENT_STATUS_buildingNumberNotFound"|translate %}
-    {% set streetNameNeedsCorrection = "ENDERECOOXID6CLIENT_STATUS_streetNameNeedsCorrection"|translate %}
-    {% set localityNeedsCorrection = "ENDERECOOXID6CLIENT_STATUS_localityNeedsCorrection"|translate %}
-    {% set postalCodeNeedsCorrection = "ENDERECOOXID6CLIENT_STATUS_postalCodeNeedsCorrection"|translate %}
-    {% set countryCodeNeedsCorrection = "ENDERECOOXID6CLIENT_STATUS_countryCodeNeedsCorrection"|translate %}
+    {% set buildingNumberIsMissing = "ENDERECOOXID7CLIENT_STATUS_buildingNumberIsMissing"|translate %}
+    {% set buildingNumberNotFound = "ENDERECOOXID7CLIENT_STATUS_buildingNumberNotFound"|translate %}
+    {% set streetNameNeedsCorrection = "ENDERECOOXID7CLIENT_STATUS_streetNameNeedsCorrection"|translate %}
+    {% set localityNeedsCorrection = "ENDERECOOXID7CLIENT_STATUS_localityNeedsCorrection"|translate %}
+    {% set postalCodeNeedsCorrection = "ENDERECOOXID7CLIENT_STATUS_postalCodeNeedsCorrection"|translate %}
+    {% set countryCodeNeedsCorrection = "ENDERECOOXID7CLIENT_STATUS_countryCodeNeedsCorrection"|translate %}
+    {% set selectCountryFirst = "ENDERECOOXID7CLIENT_SELECT_COUNTRY_FIRST"|translate %}
 
     <script>
         function enderecoLoadAMSConfig() {
@@ -69,6 +69,7 @@
                 'confirmAddress': '{{ confirmAddress|raw }}',
                 'editAddress': '{{ editAddress|raw }}',
                 'warningText': '{{ warningText|raw }}',
+                'selectCountryFirst': '{{ selectCountryFirst|raw }}',
                 popupHeadlines: {
                     'general_address': '{{ generalAddress|raw }}',
                     'billing_address': '{{ billingAddress|raw }}',

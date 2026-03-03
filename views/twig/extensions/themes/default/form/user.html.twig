@@ -1,0 +1,24 @@
+{% extends "form/user.html.twig" %}
+
+ {% block user_billing_address_form %}
+    {{ parent() }}
+
+    <script>
+        ( function() {
+            var $interval = setInterval( function() {
+                if (window.EnderecoIntegrator && window.EnderecoIntegrator.ready) {
+                    window.EnderecoIntegrator.initEmailServices(
+                        '',
+                        {
+                            "name": "default",
+                            "postfixCollection": {
+                                "email": ".content [name=\"invadr[oxuser__oxusername]\"]"
+                            }
+                        }
+                    );
+                    clearInterval($interval);
+                }
+            }, 100);
+        })();
+    </script>
+{% endblock %}
