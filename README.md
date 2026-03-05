@@ -19,8 +19,13 @@ der Befehl folgenderweise angepasst werden.
 
 [Siehe Dokumentation für Migrationen in Oxid 7](https://docs.oxid-esales.com/developer/en/7.2/development/tell_me_about/migrations.html)
 
-3. Modul aktivieren
+3. Cache leeren und Views neuaufbauen
+
+`vendor/bin/oe-console oe:cache:clear`
+`vendor/bin/oe-eshop-db_views_generate`
+
+4. Modul aktivieren
 
 `vendor/bin/oe-console oe:module:activate endereco-oxid7-client`
 
-4. Konfiguration vom Modul im Admin-Bereich vornehmen
+5. Konfiguration vom Modul im Admin-Bereich vornehmen
