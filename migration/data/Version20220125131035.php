@@ -47,13 +47,16 @@ final class Version20220125131035 extends AbstractMigration
 
             // Fill up missing values.
             $this->addSql(
-                "INSERT INTO `oxstates` (`OXID`, `OXCOUNTRYID`, `MOJOISO31662`)
-                    SELECT * FROM ( SELECT `oxstates`.`OXID`, `oxstates`.`OXCOUNTRYID`, CONCAT(`oxcountry`.`OXISOALPHA2`, '-', `oxstates`.`OXISOALPHA2`) AS 'MOJOISO31662'
-                    FROM `oxstates`
-                    JOIN `oxcountry` ON `oxcountry`.`OXID` = `oxstates`.`OXCOUNTRYID`
-                    WHERE `MOJOISO31662` IS NULL) AS `t`
-                    ON DUPLICATE KEY UPDATE `MOJOISO31662` = `t`.`MOJOISO31662`"
-            );
+                "UPDATE `oxstates`
+                     JOIN `oxcountry` ON `oxcountry`.`OXID` = `oxstates`.`OXCOUNTRYID`
+                     SET `oxstates`.`MOJOISO31662` =
+                         CASE
+                             WHEN `oxstates`.`OXISOALPHA2` REGEXP '^[A-Z]{2}-[A-Z0-9]{1,3}$'
+                                 THEN `oxstates`.`OXISOALPHA2`
+                             ELSE CONCAT(`oxcountry`.`OXISOALPHA2`, '-', `oxstates`.`OXID`)
+                         END
+                     WHERE `oxstates`.`MOJOISO31662` IS NULL or `oxstates`.`MOJOISO31662` = ''"
+                );
         }
 
         // Allow created columns to be NULL
