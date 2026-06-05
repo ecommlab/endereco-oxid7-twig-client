@@ -40,8 +40,10 @@
             "@phpcs",
             "@phpmd",
             "@phpstan",
-            "@phpcompat"
+            "@phpcompat",
+            "@lint"
         ],
+        "lint": "npm run lint",
         "phpcbf": "phpcbf --standard=PSR12 --ignore=vendor/*,shops/*,node_modules/* ./src/**/*.php",
         "phpcs": "phpcs --standard=PSR12 --ignore=vendor/*,shops/*,node_modules/* ./src/**/*.php",
         "phpstan": [
@@ -65,6 +67,7 @@
     "config": {
         "allow-plugins": {
             "ocramius/package-versions": true
-        }
+        },
+        "process-timeout": 0
     }
 }
